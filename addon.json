@@ -75,19 +75,19 @@
       "default": "center"
     },
     "showDayOfWeek": {
-      "type": "checkbox",
+      "type": "boolean",
       "label": "Show Day of Week",
       "description": "Display the day name (Monday, Tuesday, etc.)",
       "default": true
     },
     "showDate": {
-      "type": "checkbox", 
+      "type": "boolean", 
       "label": "Show Date",
       "description": "Display the full date",
       "default": true
     },
     "showTime": {
-      "type": "checkbox",
+      "type": "boolean",
       "label": "Show Time",
       "description": "Display current time",
       "default": false
@@ -132,13 +132,13 @@
       "default": "en-US"
     },
     "textShadow": {
-      "type": "checkbox",
+      "type": "boolean",
       "label": "Text Shadow",
       "description": "Add shadow effect to text for better readability",
       "default": true
     },
     "animateSeconds": {
-      "type": "checkbox",
+      "type": "boolean",
       "label": "Animate Seconds",
       "description": "Smooth animation for seconds when showing time",
       "default": true
