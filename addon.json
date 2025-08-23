@@ -1,0 +1,147 @@
+{
+  "metadata": {
+    "name": "Date Display",
+    "version": "1.0.0", 
+    "description": "Beautiful date display with custom fonts and styling - shows day of week, date, and time",
+    "author": "MyWallpaper",
+    "icon": "📅"
+  },
+  "settings": {
+    "fontUrl": {
+      "type": "url",
+      "label": "Font URL",
+      "description": "Google Fonts or custom font URL (leave empty for system font)",
+      "default": ""
+    },
+    "fontFamily": {
+      "type": "text",
+      "label": "Font Family",
+      "description": "Name of the font family to use",
+      "default": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    },
+    "fontSize": {
+      "type": "range",
+      "label": "Font Size",
+      "description": "Size of the date text",
+      "min": 12,
+      "max": 120,
+      "step": 2,
+      "default": 48
+    },
+    "fontWeight": {
+      "type": "select",
+      "label": "Font Weight", 
+      "description": "Thickness of the font",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "600"
+    },
+    "textColor": {
+      "type": "color",
+      "label": "Text Color",
+      "description": "Color of the date text",
+      "default": "#FFFFFF"
+    },
+    "backgroundColor": {
+      "type": "color",
+      "label": "Background Color",
+      "description": "Background color (set alpha to 0 for transparent)",
+      "default": "#000000"
+    },
+    "backgroundOpacity": {
+      "type": "range",
+      "label": "Background Opacity",
+      "description": "Transparency of the background",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0
+    },
+    "textAlign": {
+      "type": "select",
+      "label": "Text Alignment",
+      "description": "Horizontal alignment of text",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    "showDayOfWeek": {
+      "type": "checkbox",
+      "label": "Show Day of Week",
+      "description": "Display the day name (Monday, Tuesday, etc.)",
+      "default": true
+    },
+    "showDate": {
+      "type": "checkbox", 
+      "label": "Show Date",
+      "description": "Display the full date",
+      "default": true
+    },
+    "showTime": {
+      "type": "checkbox",
+      "label": "Show Time",
+      "description": "Display current time",
+      "default": false
+    },
+    "timeFormat": {
+      "type": "select",
+      "label": "Time Format",
+      "description": "12-hour or 24-hour time format",
+      "options": [
+        { "value": "12", "label": "12-hour (3:30 PM)" },
+        { "value": "24", "label": "24-hour (15:30)" }
+      ],
+      "default": "12"
+    },
+    "dateFormat": {
+      "type": "select",
+      "label": "Date Format",
+      "description": "How to display the date",
+      "options": [
+        { "value": "full", "label": "Full (January 15, 2024)" },
+        { "value": "short", "label": "Short (Jan 15, 2024)" },
+        { "value": "numeric", "label": "Numeric (01/15/2024)" },
+        { "value": "iso", "label": "ISO (2024-01-15)" }
+      ],
+      "default": "full"
+    },
+    "language": {
+      "type": "select",
+      "label": "Language",
+      "description": "Language for day and month names",
+      "options": [
+        { "value": "en-US", "label": "English" },
+        { "value": "fr-FR", "label": "Français" },
+        { "value": "es-ES", "label": "Español" },
+        { "value": "de-DE", "label": "Deutsch" },
+        { "value": "it-IT", "label": "Italiano" },
+        { "value": "pt-PT", "label": "Português" },
+        { "value": "ru-RU", "label": "Русский" },
+        { "value": "ja-JP", "label": "日本語" },
+        { "value": "zh-CN", "label": "中文" }
+      ],
+      "default": "en-US"
+    },
+    "textShadow": {
+      "type": "checkbox",
+      "label": "Text Shadow",
+      "description": "Add shadow effect to text for better readability",
+      "default": true
+    },
+    "animateSeconds": {
+      "type": "checkbox",
+      "label": "Animate Seconds",
+      "description": "Smooth animation for seconds when showing time",
+      "default": true
+    }
+  }
+}
