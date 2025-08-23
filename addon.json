@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "name": "Date Display",
-    "version": "1.0.0", 
-    "description": "Beautiful date display with custom fonts and styling - shows day of week, date, and time",
+    "name": "Day of Week Display",
+    "version": "2.0.0", 
+    "description": "Simple day of week display - shows only the current day name (Monday, Tuesday, etc.)",
     "author": "MyWallpaper",
     "icon": "📅"
   },
@@ -74,46 +74,6 @@
       ],
       "default": "center"
     },
-    "showDayOfWeek": {
-      "type": "boolean",
-      "label": "Show Day of Week",
-      "description": "Display the day name (Monday, Tuesday, etc.)",
-      "default": true
-    },
-    "showDate": {
-      "type": "boolean", 
-      "label": "Show Date",
-      "description": "Display the full date",
-      "default": true
-    },
-    "showTime": {
-      "type": "boolean",
-      "label": "Show Time",
-      "description": "Display current time",
-      "default": false
-    },
-    "timeFormat": {
-      "type": "select",
-      "label": "Time Format",
-      "description": "12-hour or 24-hour time format",
-      "options": [
-        { "value": "12", "label": "12-hour (3:30 PM)" },
-        { "value": "24", "label": "24-hour (15:30)" }
-      ],
-      "default": "12"
-    },
-    "dateFormat": {
-      "type": "select",
-      "label": "Date Format",
-      "description": "How to display the date",
-      "options": [
-        { "value": "full", "label": "Full (January 15, 2024)" },
-        { "value": "short", "label": "Short (Jan 15, 2024)" },
-        { "value": "numeric", "label": "Numeric (01/15/2024)" },
-        { "value": "iso", "label": "ISO (2024-01-15)" }
-      ],
-      "default": "full"
-    },
     "language": {
       "type": "select",
       "label": "Language",
@@ -137,10 +97,10 @@
       "description": "Add shadow effect to text for better readability",
       "default": true
     },
-    "animateSeconds": {
+    "showFullName": {
       "type": "boolean",
-      "label": "Animate Seconds",
-      "description": "Smooth animation for seconds when showing time",
+      "label": "Show Full Day Name",
+      "description": "Show full name (Monday) vs abbreviated (Mon)",
       "default": true
     }
   }

@@ -1,10 +1,8 @@
-// 📅 DATE DISPLAY ADDON - Customizable date and time display
-class DateDisplayAddon {
+// 📅 DAY OF WEEK DISPLAY ADDON - Simple day name display
+class DayOfWeekDisplayAddon {
     constructor() {
         this.container = document.getElementById('dateContainer')
         this.dayElement = document.getElementById('dayOfWeek')
-        this.dateElement = document.getElementById('dateDisplay')
-        this.timeElement = document.getElementById('timeDisplay')
         
         // Update interval
         this.updateInterval = null
@@ -20,20 +18,15 @@ class DateDisplayAddon {
             backgroundColor: '#000000',
             backgroundOpacity: 0,
             textAlign: 'center',
-            showDayOfWeek: true,
-            showDate: true,
-            showTime: false,
-            timeFormat: '12',
-            dateFormat: 'full',
             language: 'en-US',
             textShadow: true,
-            animateSeconds: true
+            showFullName: true
         }
         
         this.setupEventListeners()
         this.startUpdating()
         
-        console.log('📅 Date Display Addon initialized')
+        console.log('📅 Day of Week Display Addon initialized')
     }
     
     setupEventListeners() {
@@ -46,10 +39,15 @@ class DateDisplayAddon {
     }
     
     updateSettings(newSettings) {
-        console.log('🔧 Updating date settings:', newSettings)
+        console.log('🔧 Updating day settings:', newSettings)
         
         const oldFontUrl = this.settings.fontUrl
-        Object.assign(this.settings, newSettings)
+        // Merge settings more carefully to avoid conflicts
+        for (const key in newSettings) {
+            if (newSettings.hasOwnProperty(key)) {
+                this.settings[key] = newSettings[key]
+            }
+        }
         
         // Load new font if URL changed
         if (oldFontUrl !== this.settings.fontUrl && this.settings.fontUrl) {
@@ -59,14 +57,8 @@ class DateDisplayAddon {
         // Update visual styles
         this.updateStyles()
         
-        // Update display elements visibility
-        this.updateVisibility()
-        
         // Update content immediately
         this.updateDisplay()
-        
-        // Adjust update interval based on time display
-        this.adjustUpdateInterval()
     }
     
     loadCustomFont() {
@@ -153,32 +145,7 @@ class DateDisplayAddon {
         container.setAttribute('lang', this.settings.language)
     }
     
-    updateVisibility() {
-        // Day of week
-        if (this.settings.showDayOfWeek) {
-            this.dayElement.classList.remove('hidden')
-        } else {
-            this.dayElement.classList.add('hidden')
-        }
-        
-        // Date
-        if (this.settings.showDate) {
-            this.dateElement.classList.remove('hidden')
-        } else {
-            this.dateElement.classList.add('hidden')
-        }
-        
-        // Time
-        if (this.settings.showTime) {
-            this.timeElement.classList.remove('hidden')
-            if (this.settings.animateSeconds) {
-                this.timeElement.classList.add('animate-seconds')
-            }
-        } else {
-            this.timeElement.classList.add('hidden')
-            this.timeElement.classList.remove('animate-seconds')
-        }
-    }
+    // No visibility toggles needed - always show day
     
     startUpdating() {
         this.updateDisplay()
@@ -191,16 +158,10 @@ class DateDisplayAddon {
             clearInterval(this.updateInterval)
         }
         
-        // Set update frequency based on what's displayed
-        let intervalMs = 60000 // Default: update every minute
-        
-        if (this.settings.showTime) {
-            intervalMs = 1000 // Update every second for time
-        }
-        
+        // Update every minute for day changes
         this.updateInterval = setInterval(() => {
             this.updateDisplay()
-        }, intervalMs)
+        }, 60000)
     }
     
     updateDisplay() {
@@ -208,98 +169,24 @@ class DateDisplayAddon {
         const locale = this.settings.language
         
         try {
-            // Update day of week
-            if (this.settings.showDayOfWeek) {
-                const dayName = now.toLocaleDateString(locale, { weekday: 'long' })
-                this.dayElement.textContent = dayName
-            }
-            
-            // Update date
-            if (this.settings.showDate) {
-                this.dateElement.textContent = this.formatDate(now)
-            }
-            
-            // Update time
-            if (this.settings.showTime) {
-                this.timeElement.textContent = this.formatTime(now)
-            }
+            // Update day of week only
+            const dayName = now.toLocaleDateString(locale, { 
+                weekday: this.settings.showFullName ? 'long' : 'short' 
+            })
+            this.dayElement.textContent = dayName
             
         } catch (error) {
             console.error('Error updating display:', error)
             // Fallback to English
-            this.updateDisplayFallback(now)
-        }
-    }
-    
-    formatDate(date) {
-        const locale = this.settings.language
-        
-        switch (this.settings.dateFormat) {
-            case 'full':
-                return date.toLocaleDateString(locale, { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                })
-                
-            case 'short':
-                return date.toLocaleDateString(locale, { 
-                    year: 'numeric', 
-                    month: 'short', 
-                    day: 'numeric' 
-                })
-                
-            case 'numeric':
-                return date.toLocaleDateString(locale, {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                })
-                
-            case 'iso':
-                return date.toISOString().split('T')[0]
-                
-            default:
-                return date.toLocaleDateString(locale)
-        }
-    }
-    
-    formatTime(date) {
-        const locale = this.settings.language
-        const is24Hour = this.settings.timeFormat === '24'
-        
-        return date.toLocaleTimeString(locale, {
-            hour12: !is24Hour,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        })
-    }
-    
-    updateDisplayFallback(date) {
-        // English fallback
-        if (this.settings.showDayOfWeek) {
-            this.dayElement.textContent = date.toLocaleDateString('en-US', { weekday: 'long' })
-        }
-        
-        if (this.settings.showDate) {
-            this.dateElement.textContent = date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+            const dayName = now.toLocaleDateString('en-US', { 
+                weekday: this.settings.showFullName ? 'long' : 'short' 
             })
-        }
-        
-        if (this.settings.showTime) {
-            const is24Hour = this.settings.timeFormat === '24'
-            this.timeElement.textContent = date.toLocaleTimeString('en-US', {
-                hour12: !is24Hour,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            })
+            this.dayElement.textContent = dayName
         }
     }
+    
+    
+    
     
     hexToRgba(hex, alpha) {
         // Remove # if present
@@ -339,5 +226,5 @@ class DateDisplayAddon {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.dateDisplay = new DateDisplayAddon()
+    window.dayDisplay = new DayOfWeekDisplayAddon()
 })

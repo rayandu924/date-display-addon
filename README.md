@@ -1,17 +1,16 @@
-# 📅 Date Display Addon
+# 📅 Day of Week Display Addon
 
-A beautiful and highly customizable date display addon for MyWallpaper. Show the day of the week, date, and time with custom fonts, colors, and styling options.
+A simple and elegant day of week display addon for MyWallpaper. Shows only the current day name (Monday, Tuesday, etc.) with custom fonts, colors, and styling options.
 
 ## ✨ Features
 
 - **Custom Fonts** - Load any Google Fonts or web fonts via URL
 - **Multilingual Support** - 9+ languages including English, French, Spanish, German, Japanese, Chinese
-- **Flexible Display** - Show/hide day of week, date, and time independently  
-- **Multiple Formats** - Various date and time format options
+- **Full/Short Names** - Toggle between full (Monday) or abbreviated (Mon) day names
 - **Rich Styling** - Custom colors, backgrounds, shadows, and alignment
 - **Responsive Design** - Adapts beautifully to any container size
-- **Smooth Animations** - Optional animated seconds and transitions
 - **High Performance** - Efficient updates and memory usage
+- **Simple Focus** - Displays only the day of week, nothing else
 
 ## ⚙️ Configuration Options
 
@@ -31,25 +30,20 @@ A beautiful and highly customizable date display addon for MyWallpaper. Show the
 ### 📋 Display Options  
 | Setting | Type | Description | Default |
 |---------|------|-------------|---------|
-| **Show Day of Week** | Checkbox | Display day name (Monday, etc.) | On |
-| **Show Date** | Checkbox | Display full date | On |
-| **Show Time** | Checkbox | Display current time | Off |
-| **Time Format** | Select | 12-hour or 24-hour format | 12-hour |
-| **Date Format** | Select | Full/Short/Numeric/ISO formats | Full |
+| **Show Full Day Name** | Toggle | Display full (Monday) vs short (Mon) | On |
 | **Language** | Select | Display language | English |
-| **Animate Seconds** | Checkbox | Smooth seconds animation | On |
 
 ## 🌍 Supported Languages
 
-- **English** (en-US) - Sunday, January 15, 2024
-- **Français** (fr-FR) - Dimanche, 15 janvier 2024  
-- **Español** (es-ES) - Domingo, 15 de enero de 2024
-- **Deutsch** (de-DE) - Sonntag, 15. Januar 2024
-- **Italiano** (it-IT) - Domenica, 15 gennaio 2024
-- **Português** (pt-PT) - Domingo, 15 de janeiro de 2024
-- **Русский** (ru-RU) - Воскресенье, 15 января 2024 г.
-- **日本語** (ja-JP) - 2024年1月15日日曜日
-- **中文** (zh-CN) - 2024年1月15日星期日
+- **English** (en-US) - Sunday / Sun
+- **Français** (fr-FR) - Dimanche / Dim  
+- **Español** (es-ES) - Domingo / Dom
+- **Deutsch** (de-DE) - Sonntag / So
+- **Italiano** (it-IT) - Domenica / Dom
+- **Português** (pt-PT) - Domingo / Dom
+- **Русский** (ru-RU) - Воскресенье / Вс
+- **日本語** (ja-JP) - 日曜日 / 日
+- **中文** (zh-CN) - 星期日 / 日
 
 ## 🎨 Font Examples
 
@@ -74,39 +68,30 @@ https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=
 - Playfair Display → `"Playfair Display", serif`
 - Fira Code → `"Fira Code", monospace`
 
-## 📅 Date Format Examples
+## 📅 Day Format Examples
 
 | Format | Example Output |
 |--------|----------------|
-| **Full** | January 15, 2024 |
-| **Short** | Jan 15, 2024 |
-| **Numeric** | 01/15/2024 |
-| **ISO** | 2024-01-15 |
-
-## 🕐 Time Format Examples
-
-| Format | Example Output |
-|--------|----------------|
-| **12-hour** | 3:30:45 PM |
-| **24-hour** | 15:30:45 |
+| **Full Name** | Monday, Tuesday, Wednesday |
+| **Short Name** | Mon, Tue, Wed |
 
 ## 💡 Usage Ideas
 
-### 🖥️ Desktop Clock
+### 🖥️ Desktop Day Display
 - Large font size (80-100px)
-- Show time + date
+- Show full day name
 - Subtle background with low opacity
 - Custom font for personality
 
 ### 📱 Mobile Widget
 - Medium size (36-48px) 
-- Show day of week + date
+- Show abbreviated day name
 - No background for overlay effect
 - System font for consistency
 
 ### 🎨 Artistic Display
 - Elegant serif font (Playfair Display)
-- Show only day of week and date
+- Show only day of week
 - Centered alignment
 - Text shadow for depth
 
@@ -118,7 +103,7 @@ https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=
 ## 🔧 Technical Features
 
 - **Font Loading** - Graceful fallbacks for font failures
-- **Memory Efficient** - Smart update intervals (1s for time, 1m for date-only)
+- **Memory Efficient** - Smart update intervals (1m for day changes)
 - **Error Handling** - Robust fallbacks for locale/format issues
 - **Accessibility** - Proper contrast and screen reader support
 - **Performance** - Hardware-accelerated animations
@@ -132,4 +117,5 @@ https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=
 
 ## 📝 Version History
 
-- **1.0.0** - Initial release with full customization options
+- **2.0.0** - Simplified to day-of-week only display, fixed toggle bugs
+- **1.0.0** - Initial release with full date/time options (deprecated)
