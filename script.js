@@ -17,7 +17,7 @@ class DayOfWeekDisplayAddon {
         }
         
         this.setupEventListeners()
-        this.setupResizeObserver()
+        this.setupSizeWatcher()
         this.startUpdating()
         
         console.log('📅 Day of Week Display Addon initialized')
@@ -32,20 +32,38 @@ class DayOfWeekDisplayAddon {
         })
     }
     
-    setupResizeObserver() {
-        // Watch for container size changes
+    setupSizeWatcher() {
+        // Method 1: ResizeObserver on document.body (modern approach)
         if (window.ResizeObserver) {
-            this.resizeObserver = new ResizeObserver(() => {
-                console.log('📏 Container resized, adjusting text size')
-                setTimeout(() => this.adjustTextSize(), 10)
+            this.resizeObserver = new ResizeObserver(entries => {
+                console.log('📏 ResizeObserver triggered')
+                this.adjustTextSize()
             })
-            this.resizeObserver.observe(this.container)
+            // Observe the body element, not the container
+            this.resizeObserver.observe(document.body)
+            console.log('✅ ResizeObserver setup on document.body')
         }
         
-        // Fallback for older browsers
+        // Method 2: Window resize listener
         window.addEventListener('resize', () => {
+            console.log('🎨 Window resize detected')
             setTimeout(() => this.adjustTextSize(), 10)
         })
+        
+        // Method 3: Polling fallback
+        this.lastWidth = 0
+        this.lastHeight = 0
+        this.sizeWatcher = setInterval(() => {
+            const currentWidth = document.body.clientWidth
+            const currentHeight = document.body.clientHeight
+            
+            if (currentWidth !== this.lastWidth || currentHeight !== this.lastHeight) {
+                console.log('🔄 Size polling detected change:', this.lastWidth + 'x' + this.lastHeight, '→', currentWidth + 'x' + currentHeight)
+                this.lastWidth = currentWidth
+                this.lastHeight = currentHeight
+                this.adjustTextSize()
+            }
+        }, 250)
     }
     
     updateSettings(newSettings) {
@@ -138,21 +156,38 @@ class DayOfWeekDisplayAddon {
         const container = this.container
         const dayElement = this.dayElement
         
-        if (!dayElement.textContent) return
-        
-        // Start with maximum possible size
-        let fontSize = Math.min(container.clientWidth, container.clientHeight)
-        container.style.fontSize = fontSize + 'px'
-        
-        // Reduce size until text fits perfectly
-        while ((dayElement.scrollWidth > container.clientWidth || 
-                dayElement.scrollHeight > container.clientHeight) && 
-               fontSize > 10) {
-            fontSize -= 2
-            container.style.fontSize = fontSize + 'px'
+        if (!dayElement.textContent || !container.clientWidth || !container.clientHeight) {
+            console.log('⚠️ Cannot adjust size - missing content or dimensions')
+            return
         }
         
-        console.log('📏 Adjusted font size to:', fontSize + 'px')
+        console.log('📏 Adjusting text size for container:', container.clientWidth + 'x' + container.clientHeight)
+        
+        // Start with a reasonable proportion of container size
+        let fontSize = Math.min(container.clientWidth * 0.8, container.clientHeight * 0.8)
+        
+        // Test with initial size
+        container.style.fontSize = fontSize + 'px'
+        
+        // Wait a moment for rendering
+        requestAnimationFrame(() => {
+            // Increase size until we hit the limit
+            while (dayElement.scrollWidth <= container.clientWidth && 
+                   dayElement.scrollHeight <= container.clientHeight && 
+                   fontSize < Math.max(container.clientWidth, container.clientHeight)) {
+                fontSize += 2
+                container.style.fontSize = fontSize + 'px'
+            }
+            
+            // Step back one size if we went over
+            if (dayElement.scrollWidth > container.clientWidth || 
+                dayElement.scrollHeight > container.clientHeight) {
+                fontSize -= 2
+                container.style.fontSize = fontSize + 'px'
+            }
+            
+            console.log('✅ Final font size:', fontSize + 'px')
+        })
     }
     
     // No visibility toggles needed - always show day
@@ -232,6 +267,10 @@ class DayOfWeekDisplayAddon {
         
         if (this.fontLoadTimeout) {
             clearTimeout(this.fontLoadTimeout)
+        }
+        
+        if (this.sizeWatcher) {
+            clearInterval(this.sizeWatcher)
         }
         
         if (this.resizeObserver) {
