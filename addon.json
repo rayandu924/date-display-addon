@@ -7,6 +7,12 @@
     "icon": "📅"
   },
   "settings": {
+    "fontUrl": {
+      "type": "url",
+      "label": "Font URL",
+      "description": "Google Fonts or custom font URL (leave empty for system font)",
+      "default": ""
+    },
     "fontFamily": {
       "type": "text",
       "label": "Font Family",

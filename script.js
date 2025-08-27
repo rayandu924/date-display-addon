@@ -10,12 +10,14 @@ class DayOfWeekDisplayAddon {
         
         // Default settings
         this.settings = {
+            fontUrl: '',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             textColor: '#FFFFFF',
             language: 'en-US'
         }
         
         this.setupEventListeners()
+        this.setupResizeObserver()
         this.startUpdating()
         
         console.log('📅 Day of Week Display Addon initialized')
@@ -27,6 +29,22 @@ class DayOfWeekDisplayAddon {
             if (event.data?.type === 'SETTINGS_UPDATE' && event.data?.settings) {
                 this.updateSettings(event.data.settings)
             }
+        })
+    }
+    
+    setupResizeObserver() {
+        // Watch for container size changes
+        if (window.ResizeObserver) {
+            this.resizeObserver = new ResizeObserver(() => {
+                console.log('📏 Container resized, adjusting text size')
+                setTimeout(() => this.adjustTextSize(), 10)
+            })
+            this.resizeObserver.observe(this.container)
+        }
+        
+        // Fallback for older browsers
+        window.addEventListener('resize', () => {
+            setTimeout(() => this.adjustTextSize(), 10)
         })
     }
     
@@ -111,12 +129,38 @@ class DayOfWeekDisplayAddon {
         
         // Language attribute
         container.setAttribute('lang', this.settings.language)
+        
+        // Force text to fill all available space
+        this.adjustTextSize()
+    }
+    
+    adjustTextSize() {
+        const container = this.container
+        const dayElement = this.dayElement
+        
+        if (!dayElement.textContent) return
+        
+        // Start with maximum possible size
+        let fontSize = Math.min(container.clientWidth, container.clientHeight)
+        container.style.fontSize = fontSize + 'px'
+        
+        // Reduce size until text fits perfectly
+        while ((dayElement.scrollWidth > container.clientWidth || 
+                dayElement.scrollHeight > container.clientHeight) && 
+               fontSize > 10) {
+            fontSize -= 2
+            container.style.fontSize = fontSize + 'px'
+        }
+        
+        console.log('📏 Adjusted font size to:', fontSize + 'px')
     }
     
     // No visibility toggles needed - always show day
     
     startUpdating() {
         this.updateDisplay()
+        // Initial size adjustment
+        setTimeout(() => this.adjustTextSize(), 100)
         this.adjustUpdateInterval()
     }
     
@@ -143,6 +187,9 @@ class DayOfWeekDisplayAddon {
             })
             this.dayElement.textContent = dayName
             
+            // Adjust text size after content update
+            setTimeout(() => this.adjustTextSize(), 10)
+            
         } catch (error) {
             console.error('Error updating display:', error)
             // Fallback to English
@@ -150,6 +197,9 @@ class DayOfWeekDisplayAddon {
                 weekday: 'long' 
             })
             this.dayElement.textContent = dayName
+            
+            // Adjust text size after content update
+            setTimeout(() => this.adjustTextSize(), 10)
         }
     }
     
@@ -182,6 +232,10 @@ class DayOfWeekDisplayAddon {
         
         if (this.fontLoadTimeout) {
             clearTimeout(this.fontLoadTimeout)
+        }
+        
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect()
         }
         
         // Remove custom font
