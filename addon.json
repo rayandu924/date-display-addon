@@ -1,8 +1,8 @@
 {
   "metadata": {
     "name": "Day of Week Display",
-    "version": "2.2.0", 
-    "description": "Ultra responsive day display - automatically scales with container size using adaptive font sizing",
+    "version": "2.3.0", 
+    "description": "Perfect fill content day display - text automatically fills all available space without overflow",
     "author": "MyWallpaper",
     "icon": "📅"
   },

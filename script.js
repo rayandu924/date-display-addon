@@ -1,12 +1,8 @@
-// 📅 DAY OF WEEK DISPLAY ADDON - Simple day name display
-class DayOfWeekDisplayAddon {
+// 📅 DAY DISPLAY ADDON - Ultra simple responsive
+class DayDisplayAddon {
     constructor() {
         this.container = document.getElementById('dateContainer')
         this.dayElement = document.getElementById('dayOfWeek')
-        
-        // Update interval
-        this.updateInterval = null
-        this.fontLoadTimeout = null
         
         // Default settings
         this.settings = {
@@ -17,10 +13,9 @@ class DayOfWeekDisplayAddon {
         }
         
         this.setupEventListeners()
-        this.setupSizeWatcher()
         this.startUpdating()
         
-        console.log('📅 Day of Week Display Addon initialized')
+        console.log('📅 Day Display Addon initialized')
     }
     
     setupEventListeners() {
@@ -32,45 +27,11 @@ class DayOfWeekDisplayAddon {
         })
     }
     
-    setupSizeWatcher() {
-        // Method 1: ResizeObserver on document.body (modern approach)
-        if (window.ResizeObserver) {
-            this.resizeObserver = new ResizeObserver(entries => {
-                console.log('📏 ResizeObserver triggered')
-                this.adjustTextSize()
-            })
-            // Observe the body element, not the container
-            this.resizeObserver.observe(document.body)
-            console.log('✅ ResizeObserver setup on document.body')
-        }
-        
-        // Method 2: Window resize listener
-        window.addEventListener('resize', () => {
-            console.log('🎨 Window resize detected')
-            setTimeout(() => this.adjustTextSize(), 10)
-        })
-        
-        // Method 3: Polling fallback
-        this.lastWidth = 0
-        this.lastHeight = 0
-        this.sizeWatcher = setInterval(() => {
-            const currentWidth = document.body.clientWidth
-            const currentHeight = document.body.clientHeight
-            
-            if (currentWidth !== this.lastWidth || currentHeight !== this.lastHeight) {
-                console.log('🔄 Size polling detected change:', this.lastWidth + 'x' + this.lastHeight, '→', currentWidth + 'x' + currentHeight)
-                this.lastWidth = currentWidth
-                this.lastHeight = currentHeight
-                this.adjustTextSize()
-            }
-        }, 250)
-    }
-    
     updateSettings(newSettings) {
         console.log('🔧 Updating day settings:', newSettings)
         
         const oldFontUrl = this.settings.fontUrl
-        // Merge settings more carefully to avoid conflicts
+        // Merge settings
         for (const key in newSettings) {
             if (newSettings.hasOwnProperty(key)) {
                 this.settings[key] = newSettings[key]
@@ -92,20 +53,13 @@ class DayOfWeekDisplayAddon {
     loadCustomFont() {
         if (!this.settings.fontUrl) return
         
-        // Show loading state
-        this.container.classList.add('font-loading')
-        
-        // Clear previous font load timeout
-        if (this.fontLoadTimeout) {
-            clearTimeout(this.fontLoadTimeout)
-        }
-        
-        // Create font link element
+        // Remove existing font
         const existingLink = document.querySelector('link[data-custom-font]')
         if (existingLink) {
             existingLink.remove()
         }
         
+        // Create font link element
         const fontLink = document.createElement('link')
         fontLink.rel = 'stylesheet'
         fontLink.href = this.settings.fontUrl
@@ -113,100 +67,30 @@ class DayOfWeekDisplayAddon {
         
         fontLink.onload = () => {
             console.log('✅ Custom font loaded successfully')
-            this.container.classList.remove('font-loading')
-            this.container.classList.add('font-loaded')
             this.updateStyles()
         }
         
         fontLink.onerror = () => {
             console.warn('❌ Failed to load custom font, using fallback')
-            this.container.classList.remove('font-loading') 
-            this.container.classList.add('font-loaded')
             this.updateStyles()
         }
         
         document.head.appendChild(fontLink)
-        
-        // Fallback timeout
-        this.fontLoadTimeout = setTimeout(() => {
-            console.warn('⏰ Font load timeout, using fallback')
-            this.container.classList.remove('font-loading')
-            this.container.classList.add('font-loaded')
-            this.updateStyles()
-        }, 5000)
-        
         console.log('🔤 Loading custom font:', this.settings.fontUrl)
     }
     
     updateStyles() {
-        const container = this.container
-        
-        // Only apply configurable styles
-        container.style.fontFamily = this.settings.fontFamily
-        container.style.color = this.settings.textColor
-        
-        // Language attribute
-        container.setAttribute('lang', this.settings.language)
-        
-        // Force text to fill all available space
-        this.adjustTextSize()
+        // Only apply configurable styles - CSS handles all responsive sizing
+        this.container.style.fontFamily = this.settings.fontFamily
+        this.container.style.color = this.settings.textColor
+        this.container.setAttribute('lang', this.settings.language)
     }
-    
-    adjustTextSize() {
-        const container = this.container
-        const dayElement = this.dayElement
-        
-        if (!dayElement.textContent || !container.clientWidth || !container.clientHeight) {
-            console.log('⚠️ Cannot adjust size - missing content or dimensions')
-            return
-        }
-        
-        console.log('📏 Adjusting text size for container:', container.clientWidth + 'x' + container.clientHeight)
-        
-        // Start with a reasonable proportion of container size
-        let fontSize = Math.min(container.clientWidth * 0.8, container.clientHeight * 0.8)
-        
-        // Test with initial size
-        container.style.fontSize = fontSize + 'px'
-        
-        // Wait a moment for rendering
-        requestAnimationFrame(() => {
-            // Increase size until we hit the limit
-            while (dayElement.scrollWidth <= container.clientWidth && 
-                   dayElement.scrollHeight <= container.clientHeight && 
-                   fontSize < Math.max(container.clientWidth, container.clientHeight)) {
-                fontSize += 2
-                container.style.fontSize = fontSize + 'px'
-            }
-            
-            // Step back one size if we went over
-            if (dayElement.scrollWidth > container.clientWidth || 
-                dayElement.scrollHeight > container.clientHeight) {
-                fontSize -= 2
-                container.style.fontSize = fontSize + 'px'
-            }
-            
-            console.log('✅ Final font size:', fontSize + 'px')
-        })
-    }
-    
-    // No visibility toggles needed - always show day
     
     startUpdating() {
         this.updateDisplay()
-        // Initial size adjustment
-        setTimeout(() => this.adjustTextSize(), 100)
-        this.adjustUpdateInterval()
-    }
-    
-    adjustUpdateInterval() {
-        // Clear existing interval
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval)
-        }
         
         // Update every minute for day changes
-        this.updateInterval = setInterval(() => {
+        setInterval(() => {
             this.updateDisplay()
         }, 60000)
     }
@@ -216,67 +100,17 @@ class DayOfWeekDisplayAddon {
         const locale = this.settings.language
         
         try {
-            // Update day of week only
-            const dayName = now.toLocaleDateString(locale, { 
-                weekday: 'long' 
-            })
+            const dayName = now.toLocaleDateString(locale, { weekday: 'long' })
             this.dayElement.textContent = dayName
-            
-            // Adjust text size after content update
-            setTimeout(() => this.adjustTextSize(), 10)
-            
         } catch (error) {
             console.error('Error updating display:', error)
             // Fallback to English
-            const dayName = now.toLocaleDateString('en-US', { 
-                weekday: 'long' 
-            })
+            const dayName = now.toLocaleDateString('en-US', { weekday: 'long' })
             this.dayElement.textContent = dayName
-            
-            // Adjust text size after content update
-            setTimeout(() => this.adjustTextSize(), 10)
         }
-    }
-    
-    
-    
-    
-    hexToRgba(hex, alpha) {
-        // Remove # if present
-        hex = hex.replace('#', '')
-        
-        // Handle both 3 and 6 character hex codes
-        let r, g, b
-        if (hex.length === 3) {
-            r = parseInt(hex[0] + hex[0], 16)
-            g = parseInt(hex[1] + hex[1], 16)
-            b = parseInt(hex[2] + hex[2], 16)
-        } else {
-            r = parseInt(hex.slice(0, 2), 16)
-            g = parseInt(hex.slice(2, 4), 16)
-            b = parseInt(hex.slice(4, 6), 16)
-        }
-        
-        return `rgba(${r}, ${g}, ${b}, ${alpha})`
     }
     
     destroy() {
-        if (this.updateInterval) {
-            clearInterval(this.updateInterval)
-        }
-        
-        if (this.fontLoadTimeout) {
-            clearTimeout(this.fontLoadTimeout)
-        }
-        
-        if (this.sizeWatcher) {
-            clearInterval(this.sizeWatcher)
-        }
-        
-        if (this.resizeObserver) {
-            this.resizeObserver.disconnect()
-        }
-        
         // Remove custom font
         const fontLink = document.querySelector('link[data-custom-font]')
         if (fontLink) {
@@ -287,5 +121,5 @@ class DayOfWeekDisplayAddon {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.dayDisplay = new DayOfWeekDisplayAddon()
+    window.dayDisplay = new DayDisplayAddon()
 })

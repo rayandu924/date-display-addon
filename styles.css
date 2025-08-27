@@ -9,6 +9,8 @@ html, body {
     height: 100%;
     overflow: hidden;
     background: transparent;
+    /* Enable container queries */
+    container-type: inline-size;
 }
 
 #dateContainer {
@@ -22,7 +24,28 @@ html, body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: #FFFFFF;
     font-weight: 600;
+    /* Container queries pour s'adapter parfaitement au conteneur */
+    container-type: size;
+    /* Le texte s'adapte à la fois en largeur ET en hauteur */
+    font-size: min(20cqw, 20cqh);
+    padding: 0;
+    margin: 0;
+}
+
+#dayOfWeek {
+    font-size: inherit;
+    text-transform: uppercase;
+    line-height: 1;
+    /* Occupe tout l'espace disponible */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    /* Évite le dépassement */
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .date-element {
@@ -31,17 +54,4 @@ html, body {
 
 .date-element.hidden {
     display: none;
-}
-
-#dayOfWeek {
-    font-size: 0.7em;
-    text-transform: uppercase;
-}
-
-#dateDisplay {
-    font-size: 1em;
-}
-
-#timeDisplay {
-    font-size: 0.8em;
 }
