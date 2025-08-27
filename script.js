@@ -60,14 +60,6 @@ class DayDisplayAddon {
                 this.updateSettings(event.data.settings)
             }
         })
-        
-        // Resize observer for immediate recalculation
-        if (window.ResizeObserver) {
-            this.resizeObserver = new ResizeObserver(() => {
-                this.calculateOptimalFontSize()
-            })
-            this.resizeObserver.observe(this.container)
-        }
     }
     
     updateSettings(newSettings) {
@@ -147,10 +139,6 @@ class DayDisplayAddon {
     }
     
     destroy() {
-        if (this.resizeObserver) {
-            this.resizeObserver.disconnect()
-        }
-        
         const fontLink = document.querySelector('link[data-custom-font]')
         if (fontLink) fontLink.remove()
     }
