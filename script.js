@@ -10,17 +10,9 @@ class DayOfWeekDisplayAddon {
         
         // Default settings
         this.settings = {
-            fontUrl: '',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            fontSize: 48,
-            fontWeight: '600',
             textColor: '#FFFFFF',
-            backgroundColor: '#000000',
-            backgroundOpacity: 0,
-            textAlign: 'center',
-            language: 'en-US',
-            textShadow: true,
-            showFullName: true
+            language: 'en-US'
         }
         
         this.setupEventListeners()
@@ -113,33 +105,9 @@ class DayOfWeekDisplayAddon {
     updateStyles() {
         const container = this.container
         
-        // Font properties
+        // Only apply configurable styles
         container.style.fontFamily = this.settings.fontFamily
-        container.style.fontSize = `${this.settings.fontSize}px`
-        container.style.fontWeight = this.settings.fontWeight
         container.style.color = this.settings.textColor
-        
-        // Background
-        const bgColor = this.hexToRgba(this.settings.backgroundColor, this.settings.backgroundOpacity / 100)
-        container.style.backgroundColor = bgColor
-        
-        // Background class for styling
-        if (this.settings.backgroundOpacity > 0) {
-            container.classList.add('with-background')
-        } else {
-            container.classList.remove('with-background')
-        }
-        
-        // Text alignment
-        container.className = container.className.replace(/text-(left|center|right)/g, '')
-        container.classList.add(`text-${this.settings.textAlign}`)
-        
-        // Text shadow
-        if (this.settings.textShadow) {
-            container.classList.add('with-shadow')
-        } else {
-            container.classList.remove('with-shadow')
-        }
         
         // Language attribute
         container.setAttribute('lang', this.settings.language)
@@ -171,7 +139,7 @@ class DayOfWeekDisplayAddon {
         try {
             // Update day of week only
             const dayName = now.toLocaleDateString(locale, { 
-                weekday: this.settings.showFullName ? 'long' : 'short' 
+                weekday: 'long' 
             })
             this.dayElement.textContent = dayName
             
@@ -179,7 +147,7 @@ class DayOfWeekDisplayAddon {
             console.error('Error updating display:', error)
             // Fallback to English
             const dayName = now.toLocaleDateString('en-US', { 
-                weekday: this.settings.showFullName ? 'long' : 'short' 
+                weekday: 'long' 
             })
             this.dayElement.textContent = dayName
         }

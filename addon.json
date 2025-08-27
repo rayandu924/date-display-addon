@@ -7,40 +7,11 @@
     "icon": "📅"
   },
   "settings": {
-    "fontUrl": {
-      "type": "url",
-      "label": "Font URL",
-      "description": "Google Fonts or custom font URL (leave empty for system font)",
-      "default": ""
-    },
     "fontFamily": {
       "type": "text",
       "label": "Font Family",
       "description": "Name of the font family to use",
       "default": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
-    },
-    "fontSize": {
-      "type": "range",
-      "label": "Font Size",
-      "description": "Size of the date text",
-      "min": 12,
-      "max": 120,
-      "step": 2,
-      "default": 48
-    },
-    "fontWeight": {
-      "type": "select",
-      "label": "Font Weight", 
-      "description": "Thickness of the font",
-      "options": [
-        { "value": "300", "label": "Light" },
-        { "value": "400", "label": "Normal" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi Bold" },
-        { "value": "700", "label": "Bold" },
-        { "value": "800", "label": "Extra Bold" }
-      ],
-      "default": "600"
     },
     "textColor": {
       "type": "color",
@@ -48,36 +19,10 @@
       "description": "Color of the date text",
       "default": "#FFFFFF"
     },
-    "backgroundColor": {
-      "type": "color",
-      "label": "Background Color",
-      "description": "Background color (set alpha to 0 for transparent)",
-      "default": "#000000"
-    },
-    "backgroundOpacity": {
-      "type": "range",
-      "label": "Background Opacity",
-      "description": "Transparency of the background",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "default": 0
-    },
-    "textAlign": {
-      "type": "select",
-      "label": "Text Alignment",
-      "description": "Horizontal alignment of text",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
-    },
     "language": {
       "type": "select",
       "label": "Language",
-      "description": "Language for day and month names",
+      "description": "Language for day names",
       "options": [
         { "value": "en-US", "label": "English" },
         { "value": "fr-FR", "label": "Français" },
@@ -90,18 +35,6 @@
         { "value": "zh-CN", "label": "中文" }
       ],
       "default": "en-US"
-    },
-    "textShadow": {
-      "type": "boolean",
-      "label": "Text Shadow",
-      "description": "Add shadow effect to text for better readability",
-      "default": true
-    },
-    "showFullName": {
-      "type": "boolean",
-      "label": "Show Full Day Name",
-      "description": "Show full name (Monday) vs abbreviated (Mon)",
-      "default": true
     }
   }
 }
