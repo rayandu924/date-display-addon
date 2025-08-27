@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TextFit Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/textFit/2.4.0/textFit.min.js"></script>
+</head>
+<body style="background: #2c3e50; padding: 20px;">
+    <h1 style="color: white; text-align: center; margin-bottom: 30px;">Test TextFit - Vrai Fill Content</h1>
+    
+    <div style="border: 3px solid #e74c3c; background: #34495e; width: 600px; height: 100px; margin: 20px auto;">
+        <div id="dateContainer">
+            <div class="date-element" id="dayOfWeek">WEDNESDAY</div>
+        </div>
+    </div>
+    
+    <div style="border: 3px solid #e74c3c; background: #34495e; width: 200px; height: 300px; margin: 20px auto;">
+        <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #FFFFFF; font-weight: 600;">
+            <div id="test2" style="text-transform: uppercase; white-space: nowrap;">WEDNESDAY</div>
+        </div>
+    </div>
+    
+    <div style="border: 3px solid #e74c3c; background: #34495e; width: 300px; height: 300px; margin: 20px auto;">
+        <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #FFFFFF; font-weight: 600;">
+            <div id="test3" style="text-transform: uppercase; white-space: nowrap;">WEDNESDAY</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Appliquer textFit aux autres éléments aussi
+        setTimeout(() => {
+            if (typeof textFit !== 'undefined') {
+                textFit(document.getElementById('test2'), {
+                    alignHoriz: true,
+                    alignVert: true,
+                    multiLine: false,
+                    detectMultiLine: false,
+                    minFontSize: 10,
+                    maxFontSize: 1000
+                });
+                
+                textFit(document.getElementById('test3'), {
+                    alignHoriz: true,
+                    alignVert: true,
+                    multiLine: false,
+                    detectMultiLine: false,
+                    minFontSize: 10,
+                    maxFontSize: 1000
+                });
+                
+                console.log('✅ TextFit appliqué à tous les éléments');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

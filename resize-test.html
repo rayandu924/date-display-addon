@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resize Test - Binary Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .resizable-container {
+            border: 3px solid #e74c3c;
+            background: #34495e;
+            margin: 20px auto;
+            resize: both;
+            overflow: auto;
+            position: relative;
+        }
+        
+        .container1 {
+            width: 400px;
+            height: 150px;
+        }
+        
+        .container2 {
+            width: 200px;
+            height: 300px;
+        }
+        
+        .container3 {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .test-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+        
+        .test-text {
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body style="background: #2c3e50; padding: 20px;">
+    <h1 style="color: white; text-align: center; margin-bottom: 30px;">Test Resize - Algorithme de Recherche Binaire</h1>
+    
+    <p style="color: white; text-align: center; margin-bottom: 20px;">
+        <strong>Instructions :</strong> Redimensionnez les containers en tirant le coin bas-droite. 
+        Le texte doit s'adapter automatiquement en temps réel !
+    </p>
+    
+    <!-- Container 1 - Addon principal -->
+    <div class="resizable-container container1">
+        <div id="dateContainer">
+            <div class="date-element" id="dayOfWeek">WEDNESDAY</div>
+        </div>
+    </div>
+    
+    <!-- Container 2 - Test manuel -->
+    <div class="resizable-container container2">
+        <div class="test-content">
+            <div id="test2" class="test-text">WEDNESDAY</div>
+        </div>
+    </div>
+    
+    <!-- Container 3 - Test manuel -->
+    <div class="resizable-container container3">
+        <div class="test-content">
+            <div id="test3" class="test-text">WEDNESDAY</div>
+        </div>
+    </div>
+
+    <p style="color: white; margin-top: 30px; text-align: center;">
+        Vérifiez que le texte :<br>
+        ✅ Se redimensionne automatiquement lors du resize<br>
+        ✅ Remplit toujours l'espace disponible<br>
+        ✅ Ne déborde jamais du container
+    </p>
+
+    <script src="script.js"></script>
+    <script>
+        // Fonction de recherche binaire pour les containers de test
+        function binarySearchFontSize(container, textElement) {
+            if (!container || !textElement) return
+            
+            textElement.style.whiteSpace = "nowrap"
+            textElement.style.overflow = "hidden"
+            
+            let testFontSize = 200
+            let minFontSize = 1
+            let maxFontSize = 200
+            
+            while (maxFontSize - minFontSize > 1) {
+                testFontSize = Math.floor((minFontSize + maxFontSize) / 2)
+                textElement.style.fontSize = `${testFontSize}px`
+                
+                if (textElement.scrollWidth <= container.clientWidth && textElement.scrollHeight <= container.clientHeight) {
+                    minFontSize = testFontSize
+                } else {
+                    maxFontSize = testFontSize
+                }
+            }
+            
+            textElement.style.fontSize = `${minFontSize}px`
+        }
+        
+        // ResizeObserver pour les containers de test
+        if (window.ResizeObserver) {
+            const container2 = document.querySelector('.container2 .test-content')
+            const text2 = document.getElementById('test2')
+            
+            const container3 = document.querySelector('.container3 .test-content')
+            const text3 = document.getElementById('test3')
+            
+            new ResizeObserver(() => {
+                binarySearchFontSize(container2, text2)
+            }).observe(container2)
+            
+            new ResizeObserver(() => {
+                binarySearchFontSize(container3, text3)
+            }).observe(container3)
+            
+            // Calcul initial
+            setTimeout(() => {
+                binarySearchFontSize(container2, text2)
+                binarySearchFontSize(container3, text3)
+            }, 100)
+        }
+    </script>
+</body>
+</html>
