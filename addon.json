@@ -1,8 +1,8 @@
 {
   "metadata": {
     "name": "Day of Week Display",
-    "version": "2.0.0", 
-    "description": "Simple day of week display - shows only the current day name (Monday, Tuesday, etc.)",
+    "version": "2.2.0", 
+    "description": "Ultra responsive day display - automatically scales with container size using adaptive font sizing",
     "author": "MyWallpaper",
     "icon": "📅"
   },
