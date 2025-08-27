@@ -60,6 +60,11 @@ class DayDisplayAddon {
                 this.updateSettings(event.data.settings)
             }
         })
+        
+        // Window resize listener to recalculate font size
+        window.addEventListener('resize', () => {
+            this.calculateOptimalFontSize()
+        })
     }
     
     updateSettings(newSettings) {
