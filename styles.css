@@ -25,5 +25,4 @@ html, body {
 #dayOfWeek {
     text-transform: uppercase;
     white-space: nowrap;
-    overflow: hidden;
 }

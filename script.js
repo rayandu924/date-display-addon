@@ -1,10 +1,11 @@
-// 📅 DAY DISPLAY ADDON - Binary Search Algorithm
+// 📅 DAY DISPLAY ADDON - Ultra-Simple Responsive
 class DayDisplayAddon {
     constructor() {
         this.container = document.getElementById('dateContainer')
         this.dayElement = document.getElementById('dayOfWeek')
+        this.dimensions = { width: 0, height: 0 }
         
-        // Default settings - Keep only font and color
+        // Default settings
         this.settings = {
             fontUrl: 'https://fonts.cdnfonts.com/css/anurati',
             fontFamily: 'Anurati, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -12,45 +13,27 @@ class DayDisplayAddon {
             language: 'en-US'
         }
         
-        // Load default font
+        this.updateDimensions()
         this.loadCustomFont()
-        
         this.setupEventListeners()
         this.startUpdating()
-        
-        console.log('📅 Day Display Addon initialized')
+        this.applyResponsiveSize()
     }
     
-    // Binary search algorithm from the guide
-    calculateOptimalFontSize() {
-        if (!this.container || !this.dayElement) return
-        
-        const container = this.container
-        const textElement = this.dayElement
-        
-        // Force single line as in the guide
-        textElement.style.whiteSpace = "nowrap"
-        textElement.style.overflow = "hidden"
-        
-        let testFontSize = 1000
-        let minFontSize = 0.1
-        let maxFontSize = 1000
-        
-        // Binary search to find optimal font size for single line
-        while (maxFontSize - minFontSize > 1) {
-            testFontSize = Math.floor((minFontSize + maxFontSize) / 2)
-            textElement.style.fontSize = `${testFontSize}px`
-            
-            // Check if text fits in container (width and height for single line)
-            if (textElement.scrollWidth <= container.clientWidth && textElement.scrollHeight <= container.clientHeight) {
-                minFontSize = testFontSize
-            } else {
-                maxFontSize = testFontSize
-            }
+    updateDimensions() {
+        this.dimensions = {
+            width: window.innerWidth,
+            height: window.innerHeight
         }
+    }
+    
+    applyResponsiveSize() {
+        if (!this.dayElement) return
         
-        textElement.style.fontSize = `${minFontSize}px`
-        console.log(`📏 Optimal font size: ${minFontSize}px`)
+        // Formule magique : 100% de la plus petite dimension
+        const fontSize = Math.min(this.dimensions.width, this.dimensions.height)
+        
+        this.dayElement.style.fontSize = `${fontSize}px`
     }
     
     setupEventListeners() {
@@ -61,9 +44,10 @@ class DayDisplayAddon {
             }
         })
         
-        // Window resize listener to recalculate font size
+        // Window resize listener
         window.addEventListener('resize', () => {
-            this.calculateOptimalFontSize()
+            this.updateDimensions()
+            this.applyResponsiveSize()
         })
     }
     
@@ -80,6 +64,7 @@ class DayDisplayAddon {
         } else {
             this.updateStyles()
             this.updateDisplay()
+            this.applyResponsiveSize()
         }
     }
     
@@ -97,14 +82,8 @@ class DayDisplayAddon {
         fontLink.setAttribute('data-custom-font', 'true')
         
         fontLink.onload = () => {
-            console.log('✅ Custom font loaded')
             this.updateStyles()
-            this.calculateOptimalFontSize()
-        }
-        
-        fontLink.onerror = () => {
-            console.warn('❌ Font failed to load')
-            this.updateStyles()
+            this.applyResponsiveSize()
         }
         
         document.head.appendChild(fontLink)
@@ -139,8 +118,7 @@ class DayDisplayAddon {
             this.dayElement.textContent = dayName
         }
         
-        // Recalculate optimal font size after text change
-        setTimeout(() => this.calculateOptimalFontSize(), 50)
+        // Plus besoin de setTimeout avec la formule simple
     }
     
     destroy() {

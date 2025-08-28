@@ -1,8 +1,8 @@
 {
   "metadata": {
     "name": "Day of Week Display",
-    "version": "4.2.0", 
-    "description": "Pure binary search algorithm with Anurati font - minimal code, maximum efficiency",
+    "version": "5.0.0", 
+    "description": "Ultra-simple responsive sizing - 100% of smallest dimension, no complex algorithms",
     "author": "MyWallpaper",
     "icon": "📅"
   },
