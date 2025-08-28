@@ -33,7 +33,20 @@ class DayDisplayAddon {
         // Formule magique : 100% de la plus petite dimension
         const fontSize = Math.min(this.dimensions.width, this.dimensions.height)
         
-        this.dayElement.style.fontSize = `${fontSize}px`
+        // Pour éviter les limites browser sur font-size, utiliser transform scale pour très petites tailles
+        if (fontSize < 12) {
+            // Utiliser une taille de base de 12px et scaler vers le bas
+            this.dayElement.style.fontSize = '12px'
+            const scaleFactor = fontSize / 12
+            this.dayElement.style.transform = `scale(${scaleFactor})`
+            this.dayElement.style.transformOrigin = 'center'
+            console.log(`🔽 Tiny scaling: fontSize=12px, scale=${scaleFactor}, target=${fontSize}px`)
+        } else {
+            // Taille normale, pas besoin de transform
+            this.dayElement.style.fontSize = `${fontSize}px`
+            this.dayElement.style.transform = 'none'
+            console.log(`📏 Normal scaling: fontSize=${fontSize}px`)
+        }
     }
     
     setupEventListeners() {
