@@ -10,7 +10,8 @@ class DayDisplayAddon {
             fontUrl: 'https://fonts.cdnfonts.com/css/anurati',
             fontFamily: 'Anurati, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             textColor: '#FFFFFF',
-            language: 'en-US'
+            language: 'en-US',
+            letterSpacingPercent: 3 // Pourcentage d'espacement entre lettres (3% par défaut)
         }
         
         this.updateDimensions()
@@ -33,19 +34,24 @@ class DayDisplayAddon {
         // Formule magique : 100% de la plus petite dimension
         const fontSize = Math.min(this.dimensions.width, this.dimensions.height)
         
+        // Espacement entre lettres responsive : configurable via settings
+        const letterSpacing = fontSize * (this.settings.letterSpacingPercent / 100)
+        
         // Pour éviter les limites browser sur font-size, utiliser transform scale pour très petites tailles
         if (fontSize < 12) {
             // Utiliser une taille de base de 12px et scaler vers le bas
             this.dayElement.style.fontSize = '12px'
+            this.dayElement.style.letterSpacing = `${12 * (this.settings.letterSpacingPercent / 100)}px`
             const scaleFactor = fontSize / 12
             this.dayElement.style.transform = `scale(${scaleFactor})`
             this.dayElement.style.transformOrigin = 'center'
-            console.log(`🔽 Tiny scaling: fontSize=12px, scale=${scaleFactor}, target=${fontSize}px`)
+            console.log(`🔽 Tiny scaling: fontSize=12px, letterSpacing=${12 * (this.settings.letterSpacingPercent / 100)}px, scale=${scaleFactor}, target=${fontSize}px`)
         } else {
             // Taille normale, pas besoin de transform
             this.dayElement.style.fontSize = `${fontSize}px`
+            this.dayElement.style.letterSpacing = `${letterSpacing}px`
             this.dayElement.style.transform = 'none'
-            console.log(`📏 Normal scaling: fontSize=${fontSize}px`)
+            console.log(`📏 Normal scaling: fontSize=${fontSize}px, letterSpacing=${letterSpacing}px`)
         }
     }
     
