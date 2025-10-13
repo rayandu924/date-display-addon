@@ -4,21 +4,28 @@ class DayDisplayAddon {
         this.container = document.getElementById('dateContainer')
         this.dayElement = document.getElementById('dayOfWeek')
         this.dimensions = { width: 0, height: 0 }
-        
-        // Default settings
+        this.layerId = window.MYWALLPAPER_LAYER_ID
+        this.readySignalSent = false
+
+        // ✅ Read pre-injected config from MyWallpaper (avoids race condition)
+        const config = window.MYWALLPAPER_CONFIG || {}
+
+        // Default settings merged with pre-injected config
         this.settings = {
-            fontUrl: 'https://fonts.cdnfonts.com/css/anurati',
-            fontFamily: 'Anurati, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            textColor: '#FFFFFF',
-            language: 'en-US',
-            letterSpacingPercent: 8 // Pourcentage d'espacement entre lettres (8% par défaut pour être plus visible)
+            fontUrl: config.fontUrl ?? 'https://fonts.cdnfonts.com/css/anurati',
+            fontFamily: config.fontFamily ?? 'Anurati, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            textColor: config.textColor ?? '#FFFFFF',
+            language: config.language ?? 'en-US',
+            letterSpacingPercent: config.letterSpacingPercent ?? 8
         }
-        
+
         this.updateDimensions()
         this.loadCustomFont()
         this.setupEventListeners()
         this.startUpdating()
         this.applyResponsiveSize()
+
+        console.log('📅 Day Display initialized with config:', this.settings)
     }
     
     updateDimensions() {
@@ -97,24 +104,45 @@ class DayDisplayAddon {
     }
     
     loadCustomFont() {
-        if (!this.settings.fontUrl) return
-        
+        if (!this.settings.fontUrl) {
+            this.signalReadyIfNeeded()
+            return
+        }
+
         // Remove existing font
         const existingLink = document.querySelector('link[data-custom-font]')
         if (existingLink) existingLink.remove()
-        
+
         // Create font link element
         const fontLink = document.createElement('link')
         fontLink.rel = 'stylesheet'
         fontLink.href = this.settings.fontUrl
         fontLink.setAttribute('data-custom-font', 'true')
-        
+
         fontLink.onload = () => {
             this.updateStyles()
             this.applyResponsiveSize()
+            this.signalReadyIfNeeded()
         }
-        
+
+        fontLink.onerror = () => {
+            console.warn('⚠️ Font failed to load, using fallback')
+            this.signalReadyIfNeeded()
+        }
+
         document.head.appendChild(fontLink)
+    }
+
+    signalReadyIfNeeded() {
+        if (this.readySignalSent || !this.layerId) return
+        if (!this.dayElement || !this.dayElement.textContent) return
+
+        this.readySignalSent = true
+        window.parent.postMessage({
+            type: 'ADDON_READY',
+            layerId: this.layerId
+        }, '*')
+        console.log('✅ Day display ready signal sent')
     }
     
     updateStyles() {
@@ -136,7 +164,7 @@ class DayDisplayAddon {
     updateDisplay() {
         const now = new Date()
         const locale = this.settings.language
-        
+
         try {
             const dayName = now.toLocaleDateString(locale, { weekday: 'long' })
             this.dayElement.textContent = dayName
@@ -145,8 +173,9 @@ class DayDisplayAddon {
             const dayName = now.toLocaleDateString('en-US', { weekday: 'long' })
             this.dayElement.textContent = dayName
         }
-        
-        // Plus besoin de setTimeout avec la formule simple
+
+        // ✅ Signal ready after first display update
+        this.signalReadyIfNeeded()
     }
     
     destroy() {
